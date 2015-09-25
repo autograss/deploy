@@ -1,3 +1,6 @@
 192.168.50.4:
   run_list:
     - recipe[mosquitto]
+192.168.50.5:
+  run_list:
+    - recipe[mosquitto]

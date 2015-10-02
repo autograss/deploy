@@ -16,7 +16,3 @@ execute 'apt-update' do
 end
 
 apt_package 'mosquitto mosquitto-clients python-mosquitto'
-
-service 'mosquitto' do
-  action :stop
-end

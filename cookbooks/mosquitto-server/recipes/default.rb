@@ -1,12 +1,49 @@
 include_recipe 'mosquitto::default'
 
-cookbook_file "#{$PERSONAL_MOSQUITTO_CONF}/mosquitto_topics" do
-  source 'mosquitto_topics'
+MOSQUITO_CONF_DIR = '/etc/mosquitto/conf.d'
+AUTOGRASS_CONF_DIR = '/home/autograss/.mosquitto/'
+
+apt_package 'sqlite'
+
+
+directory '/home/autograss/' do
+  owner 'autograss'
+  group 'sudo'
+  mode '0755'
   action :create
 end
 
-cookbook_file "#{$PERSONAL_MOSQUITTO_CONF}/mosquitto.conf" do
-  source 'mosquitto.conf'
+user 'autograss' do
+  shell '/bin/bash'
+  home '/home/autograss/'
+  system true
+  action :create
+end
+
+group 'sudo' do
+  action :modify
+  members 'autograss'
+  append true
+end
+
+directory "#{AUTOGRASS_CONF_DIR}" do
+  owner 'autograss'
+  group 'sudo'
+  mode '0755'
+  action :create
+end
+
+template "#{MOSQUITO_CONF_DIR}/autograss.conf" do
+  source 'autograss.conf.erb'
+  mode '0750'
+  owner 'autograss'
+  group 'sudo'
+  variables({:autograss_conf_dir => AUTOGRASS_CONF_DIR})
+end
+
+cookbook_file "#{AUTOGRASS_CONF_DIR}/autograss_topics" do
+  source 'autograss_topics'
+  owner 'autograss'
   action :create
 end
 
@@ -15,6 +52,5 @@ execute 'link-mosquitto-exec' do
 end
 
 execute 'mosquitto-brokker' do
-  command "mosquitto -d -p 13000 -v"
+  command "mosquitto -c #{MOSQUITO_CONF_DIR}/autograss.conf -d -v"
 end
-

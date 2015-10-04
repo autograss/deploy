@@ -1,9 +1,7 @@
+include_dir <%= @autograss_conf_dir %>
 acl_file autograss_topics <%= @autograss_conf_dir %>
 
 # Database Configurations
 allow_anonymous true
 autosave_interval 1
-persistence true
-persistence_file autograss.db
-persistence_location <%= @autograss_conf_dir %>
 port 13000

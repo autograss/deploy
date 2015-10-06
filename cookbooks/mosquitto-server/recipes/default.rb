@@ -1,7 +1,7 @@
 include_recipe 'mosquitto::default'
 
 MOSQUITO_CONF_DIR = '/etc/mosquitto/conf.d'
-AUTOGRASS_CONF_DIR = '/home/autograss/.config/'
+AUTOGRASS_CONF_DIR = '/home/autograss/.config'
 
 apt_package 'sqlite'
 
@@ -23,6 +23,12 @@ execute 'link-mosquitto-exec' do
   command 'ln -sf /usr/sbin/mosquitto /usr/bin/mosquitto'
 end
 
-execute 'mosquitto-brokker' do
-  command "mosquitto -c #{MOSQUITO_CONF_DIR}/autograss.conf -d -v"
+execute 'change-pid-owner' do
+  command 'chown autograss:sudo /var/run/mosquitto.pid'
+end
+
+# No debian, quando um pacote é instalado, seu serviço é automativamente
+# iniciado
+service 'mosquitto' do
+  action :restart
 end

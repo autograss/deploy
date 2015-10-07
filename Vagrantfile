@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "server" do |server|
     server.vm.box = "thoughtbot/debian-jessie-64"
-    server.vm.network "private_network", ip: "192.168.50.4"
+    server.vm.network "public_network"
 
     server.vm.provision "shell", inline: <<-shell
      sudo apt-get update

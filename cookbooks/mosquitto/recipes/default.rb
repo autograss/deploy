@@ -20,13 +20,6 @@ end
 
 apt_package 'mosquitto mosquitto-clients python-mosquitto'
 
-directory "#{server['home']}" do
-  owner 'autograss'
-  group 'sudo'
-  mode '0755'
-  action :create
-end
-
 user 'autograss' do
   shell '/bin/bash'
   home "#{server['home']}"
@@ -39,6 +32,14 @@ group 'sudo' do
   members 'autograss'
   append true
 end
+
+directory "#{server['home']}" do
+  owner 'autograss'
+  group 'sudo'
+  mode '0755'
+  action :create
+end
+
 
 directory "#{AUTOGRASS_CONF_DIR}" do
   owner 'autograss'
